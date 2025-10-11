@@ -1,0 +1,220 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{txfonts}
+\usepackage{tkz-euclide}
+\usepackage{listings}
+\usepackage{adjustbox}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{gvv}
+\usepackage{lmodern}
+\usepackage{circuitikz}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{mathtools} 
+
+\setbeamertemplate{page number in head/foot}[totalframenumber]
+
+\title{5.2.4}
+\date{\today}
+\author{EE25BTECH11001 - Aarush Dilawri}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Problem}
+\textbf{Question}:\\
+Solve the system of equations
+\begin{align}
+2x+y-6=0
+\end{align}
+\begin{align}
+4x-2y+4=0
+\end{align}
+\end{frame}
+
+\begin{frame}{Solution Setup}
+The equation of line:
+\begin{align}
+\vec{n}^\top\vec{x}=c
+\end{align}
+
+Line L:
+\begin{align}
+\myvec{2 & 1}\myvec{x \\ y}=6
+\end{align}
+
+Line K:
+\begin{align}
+\myvec{4 & -2}\myvec{x \\ y}=-4
+\end{align}
+\end{frame}
+
+\begin{frame}{Matrix Form}
+These can be combined and written in matrix form:
+\begin{align}
+\myvec{2 & 1 \\ 4 & -2}\myvec{x \\ y} = \myvec{6 \\ -4}
+\end{align}
+
+The following augmented matrix can be solved by Gaussian elimination:
+\begin{align}
+\augvec{2}{1}{2 & 1 & 6 \\ 4 & -2 & -4} \xleftrightarrow{R_2 \rightarrow R_2-2R_1} \augvec{2}{1}{2 & 1 & 6 \\ 0 & -4 & -16}
+\end{align}
+\end{frame}
+
+\begin{frame}{Rank and Solution}
+From the second row:
+\begin{align}
+-4y=-16 \implies y=4
+\end{align}
+
+Substituting in the first equation:
+\begin{align}
+2x+4=6 \implies x=1
+\end{align}
+
+Hence, the unique solution is
+\begin{align}
+(x,y)=(1,4)
+\end{align}
+\end{frame}
+
+\begin{frame}{Figure}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[height=0.5\textheight, keepaspectratio]{figs/fig.png}
+    \label{figure_1}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{C Code (code.c)}
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+int solve_linear(double a1, double b1, double c1,
+                 double a2, double b2, double c2,
+                 double *x, double *y) {
+    double det = a1*b2 - a2*b1;
+    if(det != 0) {
+        *x = (b1*c2 - b2*c1) / det;
+        *y = (c1*a2 - c2*a1) / det;
+        return 1; // unique solution
+    }
+    if(a1*b2 == a2*b1 && a1*c2 == a2*c1 && b1*c2 == b2*c1) {
+        return 2; // infinite solutions
+    }
+    return 0; // no solution
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Python Code (code.py)}
+\begin{lstlisting}[language=Python]
+# code.py
+import matplotlib.pyplot as plt
+import numpy as np
+
+# New equations: 2x + y - 6 = 0, 4x - 2y + 4 = 0
+a1, b1, c1 = 2, 1, -6
+a2, b2, c2 = 4, -2, 4
+
+det = a1*b2 - a2*b1
+xs = np.linspace(-10, 10, 400)
+
+if det != 0:
+    x = (b1*c2 - b2*c1) / det
+    y = (c1*a2 - c2*a1) / det
+    res = 1
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Python Code (code.py)}
+\begin{lstlisting}[language=Python]
+elif (a1*b2 == a2*b1 and a1*c2 == a2*c1 and b1*c2 == b2*c1):
+    res = 2
+else:
+    res = 0
+
+# Plot lines
+y1 = -(a1*xs + c1)/b1
+y2 = -(a2*xs + c2)/b2
+plt.plot(xs, y1, label=f"{a1}x+{b1}y+{c1}=0")
+plt.plot(xs, y2, label=f"{a2}x+{b2}y+{c2}=0")
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Python Code (code.py)}
+\begin{lstlisting}[language=Python]
+if res == 1:
+    plt.scatter([x],[y], color="red", zorder=5, 
+                label=f"Unique ({x:.2f},{y:.2f})")
+elif res == 2:
+    plt.title("Infinite solutions (same line)")
+else:
+    plt.title("No solution (parallel lines)")
+
+plt.legend()
+plt.grid(True)
+plt.show()
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Python Code (nativecode.py)}
+\begin{lstlisting}[language=Python]
+# nativecode.py
+import ctypes
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Load shared library
+lib = ctypes.CDLL("./code.so")
+
+lib.solve_linear.argtypes = [ctypes.c_double, ctypes.c_double, ctypes.c_double,
+                             ctypes.c_double, ctypes.c_double, ctypes.c_double,
+                             ctypes.POINTER(ctypes.c_double), ctypes.POINTER(ctypes.c_double)]
+lib.solve_linear.restype = ctypes.c_int
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Python Code (nativecode.py)}
+\begin{lstlisting}[language=Python]
+# New equations: 2x + y - 6 = 0, 4x - 2y + 4 = 0
+a1, b1, c1 = 2, 1, -6
+a2, b2, c2 = 4, -2, 4
+x = ctypes.c_double()
+y = ctypes.c_double()
+
+res = lib.solve_linear(a1,b1,c1,a2,b2,c2,ctypes.byref(x),ctypes.byref(y))
+
+# Plot
+xs = np.linspace(-10, 10, 400)
+y1 = -(a1*xs + c1)/b1
+y2 = -(a2*xs + c2)/b2
+
+plt.plot(xs, y1, label=f"{a1}x+{b1}y+{c1}=0")
+plt.plot(xs, y2, label=f"{a2}x+{b2}y+{c2}=0")
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Python Code (nativecode.py)}
+\begin{lstlisting}[language=Python]
+if res == 1:
+    plt.scatter([x.value],[y.value], color="red", zorder=5,
+                label=f"Unique ({x.value:.2f},{y.value:.2f})")
+elif res == 2:
+    plt.title("Infinite solutions (same line)")
+else:
+    plt.title("No solution (parallel lines)")
+
+plt.legend()
+plt.grid(True)
+plt.show()
+\end{lstlisting}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,20 @@
+\frametitle{Pure Python Code (Part 3)}
+\begin{lstlisting}
+plt.figure(figsize=(7, 6))
+plt.plot(x_vals, y_vals, 'g-', lw=2, label='Perpendicular Bisector')
+plt.plot([P[0], Q[0]], [P[1], Q[1]], 'b--', lw=2, label='Line PQ')
+
+# Mark points
+plt.scatter(*P, color='red', s=60, label='P(1,4)')
+plt.scatter(*Q, color='blue', s=60, label='Q(-4,3)')
+plt.scatter(*M, color='purple', s=60, label='Midpoint M')
+
+plt.axhline(0, color='black', lw=1)
+plt.axvline(0, color='black', lw=1)
+plt.xlabel("X-axis")
+plt.ylabel("Y-axis")
+plt.title("Perpendicular Bisector (Pure Python, k = -4)")
+plt.legend()
+plt.grid(True)
+plt.show()
+\end{lstlisting}

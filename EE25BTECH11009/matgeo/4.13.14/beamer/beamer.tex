@@ -1,0 +1,315 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{txfonts}
+\usepackage{tkz-euclide}
+\usepackage{listings}
+\usepackage{adjustbox}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{gvv}
+\usepackage{lmodern}
+\usepackage{circuitikz}
+\usepackage{tikz}
+\usepackage{graphicx}
+
+\setbeamertemplate{page number in head/foot}[totalframenumber]
+
+\usepackage{tcolorbox}
+\tcbuselibrary{minted,breakable,xparse,skins}
+
+\definecolor{bg}{gray}{0.95}
+\DeclareTCBListing{mintedbox}{O{}m!O{}}{%
+  breakable=true,
+  listing engine=minted,
+  listing only,
+  minted language=#2,
+  minted style=default,
+  minted options={%
+    linenos,
+    gobble=0,
+    breaklines=true,
+    breakafter=,,
+    fontsize=\small,
+    numbersep=8pt,
+    #1},
+  boxsep=0pt,
+  left skip=0pt,
+  right skip=0pt,
+  left=25pt,
+  right=0pt,
+  top=3pt,
+  bottom=3pt,
+  arc=5pt,
+  leftrule=0pt,
+  rightrule=0pt,
+  bottomrule=2pt,
+  toprule=2pt,
+  colback=bg,
+  colframe=orange!70,
+  enhanced,
+  overlay={%
+    \begin{tcbclipinterior}
+    \fill[orange!20!white] (frame.south west) rectangle ([xshift=20pt]frame.north west);
+    \end{tcbclipinterior}},
+}
+
+\lstset{
+    language=C,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    stringstyle=\color{orange},
+    commentstyle=\color{green!60!black},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    breaklines=true,
+    showstringspaces=false,
+}
+
+%------------------------------------------------------------
+
+\title{4.13.14}
+\date{September 6, 2025}
+\author{Anshu Kumar Ram - EE25BTECH11009}
+
+\begin{document}
+
+\frame{\titlepage}
+
+%---------------------------------
+\begin{frame}{Question}
+The perpendicular bisector of the line segment joining $P(1,4)$ and $Q(k,3)$ has $Y$--intercept $-4$. Then a possible value of $k$ is
+\begin{align}
+\text{(a) }1 \quad \text{(b) }2 \quad \text{(c) }-2 \quad \text{(d) }-4
+\end{align}
+\end{frame}
+
+%---------------------------------
+\begin{frame}{Theoretical Solution}
+Equation of perpendicular bisector:
+\begin{align}
+\vec{n}^{\top}\vec{x} = c \label{eq:1}
+\end{align}
+Direction vector of $PQ$:
+\begin{align}
+\vec{PQ} = \myvec{k-1 \\ -1} \label{eq:2}
+\end{align}
+As the perpendicular bisector has normal:
+\begin{align}
+\vec{n} = \myvec{k-1 \\ -1}
+\end{align}
+\end{frame}
+
+%---------------------------------
+\begin{frame}{Midpoint and Substitution}
+Midpoint of $PQ$:
+\begin{align}
+\vec{M} = \myvec{\tfrac{1+k}{2} \\[4pt] \tfrac{7}{2}}
+\end{align}
+Y-intercept of the perpendicular bisector:
+\begin{align}
+c = -4 \label{eq:3}
+\end{align}
+
+Substitute ~\eqref{eq:2} and ~\eqref{eq:3} in ~\eqref{eq:1}:
+\begin{align}
+\myvec{k-1 & -1}\myvec{-\tfrac{1+k}{2} \\[4pt] -4-\tfrac{7}{2}}=0
+\end{align}
+\end{frame}
+
+%---------------------------------
+\begin{frame}{Solving for k}
+\begin{align}
+-(k^2 - 1) + 15 = 0
+\end{align}
+\begin{align}
+-k^2 + 16 = 0 \quad \Rightarrow \quad k^2 = 16
+\end{align}
+Hence
+\begin{align}
+k = \pm 4
+\end{align}
+From the options, valid value is
+\[
+\boxed{-4}
+\]
+\end{frame}
+
+\begin{frame}{Plot}
+\centering
+\includegraphics[width=3\columnwidth, height=0.8\textheight, keepaspectratio]{figs/Figure_1.png}
+\end{frame}
+%---------------------------------
+\begin{frame}[fragile]
+\frametitle{C Code (Part 1)}
+\begin{lstlisting}
+#include <stdio.h>
+void compute_bisector(double *P, double *Q, double *results)
+{
+    double Mx = (P[0] + Q[0]) / 2.0;
+    double My = (P[1] + Q[1]) / 2.0;
+    double a = Q[0] - P[0];  // Δx
+    double b = Q[1] - P[1];  // Δy
+\end{lstlisting}
+\end{frame}
+
+%---------------------------------
+\begin{frame}[fragile]
+\frametitle{C Code (Part 2)}
+\begin{lstlisting}
+    double c = a * Mx + b * My;
+    results[0] = a;  // a
+    results[1] = b;  // b
+    results[2] = c;  // c
+
+    if (b != 0) {
+        results[3] = -a / b;   // slope
+        results[4] = c / b;    // intercept
+    } else {
+        results[3] = 1e9;
+        results[4] = 0;
+    }
+}
+\end{lstlisting}
+\end{frame}
+
+%---------------------------------
+\begin{frame}[fragile]
+\frametitle{Python + C Code (Part 1)}
+\begin{lstlisting}
+import numpy as np
+import matplotlib.pyplot as plt
+import ctypes
+
+lib = ctypes.CDLL("./func.so")
+lib.compute_bisector.argtypes = [
+    ctypes.POINTER(ctypes.c_double),
+    ctypes.POINTER(ctypes.c_double),
+    ctypes.POINTER(ctypes.c_double)
+]
+\end{lstlisting}
+\end{frame}
+
+%---------------------------------
+\begin{frame}[fragile]
+\frametitle{Python + C Code (Part 2)}
+\begin{lstlisting}
+P = np.array([1.0, 4.0])
+Q = np.array([-4.0, 3.0])
+results = (ctypes.c_double * 5)()
+P_c = (ctypes.c_double * 2)(*P)
+Q_c = (ctypes.c_double * 2)(*Q)
+
+lib.compute_bisector(P_c, Q_c, results)
+a, b, c, slope, y_intercept = [results[i] for i in range(5)]
+
+M = (P + Q) / 2
+x_vals = np.linspace(-6, 6, 100)
+if abs(slope) < 1e8:
+    y_vals = slope * x_vals + y_intercept
+else:
+    x_vals = np.ones(100) * (-c / a)
+    y_vals = np.linspace(-6, 6, 100)
+
+\end{lstlisting}
+\end{frame}
+
+%---------------------------------
+\begin{frame}[fragile]
+\frametitle{Python + C Code (Part 3)}
+\begin{lstlisting}
+plt.figure(figsize=(7, 6))
+plt.plot(x_vals, y_vals, 'g-', lw=2, label='Perpendicular Bisector')
+plt.plot([P[0], Q[0]], [P[1], Q[1]], 'b--', lw=2, label='Line PQ')
+
+plt.scatter(*P, color='red', s=60, label='P(1,4)')
+plt.scatter(*Q, color='blue', s=60, label='Q(-4,3)')
+plt.scatter(*M, color='purple', s=60, label='Midpoint M')
+
+plt.axhline(0, color='black', lw=1)
+plt.axvline(0, color='black', lw=1)
+plt.xlabel("X-axis")
+plt.ylabel("Y-axis")
+plt.title("Perpendicular Bisector using C + Python (k = -4)")
+plt.legend()
+plt.grid(True)
+plt.show()
+\end{lstlisting}
+\end{frame}
+%---------------------------------
+\begin{frame}[fragile]
+\frametitle{Pure Python Code (Part 1)}
+\begin{lstlisting}
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Given points
+P = np.array([1, 4])
+k = -4     # Correct answer
+Q = np.array([k, 3])
+
+# Midpoint of PQ
+M = (P + Q) / 2
+# Direction vector of PQ
+PQ = Q - P
+# Normal vector to bisector (same as direction of PQ)
+n = PQ
+# Equation of bisector: n·(x - M) = 0  → a*x + b*y = c
+a, b = n
+c = a*M[0] + b*M[1]
+\end{lstlisting}
+\end{frame}
+
+%---------------------------------
+\begin{frame}[fragile]
+\frametitle{Pure Python Code (Part 2)}
+\begin{lstlisting}
+# Find slope and y-intercept
+if b != 0:
+    m_bisector = -a/b
+    y_intercept = c/b
+else:
+    m_bisector = None  # vertical line case
+
+print(f"Equation of perpendicular bisector:")
+print(f"({a})x + ({b})y = {c:.2f}")
+if m_bisector is not None:
+    print(f"y = {m_bisector:.2f}x + {y_intercept:.2f}")
+
+# Generate x values for plotting
+x_vals = np.linspace(-6, 6, 100)
+y_vals = m_bisector * x_vals + y_intercept
+\end{lstlisting}
+\end{frame}
+
+%---------------------------------
+\begin{frame}[fragile]
+\frametitle{Pure Python Code (Part 3)}
+\begin{lstlisting}
+plt.figure(figsize=(7, 6))
+plt.plot(x_vals, y_vals, 'g-', lw=2, label='Perpendicular Bisector')
+plt.plot([P[0], Q[0]], [P[1], Q[1]], 'b--', lw=2, label='Line PQ')
+
+# Mark points
+plt.scatter(*P, color='red', s=60, label='P(1,4)')
+plt.scatter(*Q, color='blue', s=60, label='Q(-4,3)')
+plt.scatter(*M, color='purple', s=60, label='Midpoint M')
+
+plt.axhline(0, color='black', lw=1)
+plt.axvline(0, color='black', lw=1)
+plt.xlabel("X-axis")
+plt.ylabel("Y-axis")
+plt.title("Perpendicular Bisector (Pure Python, k = -4)")
+plt.legend()
+plt.grid(True)
+plt.show()
+\end{lstlisting}
+\end{frame}
+
+%---------------------------------
+
+
+\end{document}

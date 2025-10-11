@@ -1,0 +1,16 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k}{as} \PYG{n+nn}{plt}
+\PYG{k+kn}{import} \PYG{n+nn}{ctypes}
+
+\PYG{n}{lib} \PYG{o}{=} \PYG{n}{ctypes}\PYG{o}{.}\PYG{n}{CDLL}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}./func.so\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{out} \PYG{o}{=} \PYG{p}{(}\PYG{n}{ctypes}\PYG{o}{.}\PYG{n}{c\PYGZus{}double} \PYG{o}{*} \PYG{l+m+mi}{4}\PYG{p}{)()}
+\PYG{n}{lib}\PYG{o}{.}\PYG{n}{find\PYGZus{}plane}\PYG{p}{(}\PYG{n}{out}\PYG{p}{)}
+
+\PYG{n}{n} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{array}\PYG{p}{([}\PYG{n}{out}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{out}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{],} \PYG{n}{out}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]])}
+\PYG{n}{d} \PYG{o}{=} \PYG{n}{out}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{]}
+\PYG{n}{n\PYGZus{}int}\PYG{p}{,} \PYG{n}{d\PYGZus{}int} \PYG{o}{=} \PYG{l+m+mi}{19} \PYG{o}{*} \PYG{n}{n}\PYG{p}{,} \PYG{l+m+mi}{19} \PYG{o}{*} \PYG{n}{d}
+
+\PYG{n+nb}{print}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}Plane: }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{n\PYGZus{}int}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s2}{.0f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{x + }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{n\PYGZus{}int}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s2}{.0f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{y + }\PYG{l+s+se}{\PYGZbs{}}
+\PYG{l+s+si}{\PYGZob{}}\PYG{n}{n\PYGZus{}int}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]}\PYG{l+s+si}{:}\PYG{l+s+s2}{.0f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{z + }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{d\PYGZus{}int}\PYG{l+s+si}{:}\PYG{l+s+s2}{.0f}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{ = 0\PYGZdq{}}\PYG{p}{)}
+\end{Verbatim}

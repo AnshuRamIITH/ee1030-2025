@@ -1,0 +1,121 @@
+\let\negmedspace\undefined
+\let\negthickspace\undefined
+\documentclass[journal]{IEEEtran}
+\usepackage[a5paper, margin=10mm, onecolumn]{geometry}
+%\usepackage{lmodern} 
+\usepackage{tfrupee}
+
+\setlength{\headheight}{1cm}
+\setlength{\headsep}{0mm}
+
+\usepackage{gvv-book}
+\usepackage{gvv}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{txfonts}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{gensymb}
+\usepackage{comment}
+\usepackage[breaklinks=true]{hyperref}
+\usepackage{tkz-euclide} 
+\usepackage{listings}                                      
+\def\inputGnumericTable{}                                 
+\usepackage[latin1]{inputenc}                                
+\usepackage{color}                                            
+\usepackage{array}                                            
+\usepackage{longtable}                                       
+\usepackage{calc}                                             
+\usepackage{multirow}                                         
+\usepackage{hhline}                                           
+\usepackage{ifthen}                                           
+\usepackage{lscape}
+\usepackage{circuitikz}
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+    text width=4em, text centered, rounded corners, minimum height=3em]
+\tikzstyle{sum} = [draw, fill=blue!10, circle, minimum size=1cm, node distance=1.5cm]
+\tikzstyle{input} = [coordinate]
+\tikzstyle{output} = [coordinate]
+
+\begin{document}
+
+\bibliographystyle{IEEEtran}
+\vspace{3cm}
+
+\title{4.13.14}
+\author{EE25BTECH11009 - Anshu Kumar Ram }
+\maketitle
+{\let\newpage\relax\maketitle}
+
+\renewcommand{\thefigure}{\theenumi}
+\renewcommand{\thetable}{\theenumi}
+\setlength{\intextsep}{10pt}
+
+\numberwithin{equation}{enumi}
+\numberwithin{figure}{enumi}
+\renewcommand{\thetable}{\theenumi}
+
+\textbf{Question}:\\
+The perpendicular bisector of the line segment joining $P(1,4)$ and $Q(k,3)$ has $Y$--intercept $-4$. Then a possible value of $k$ is
+\begin{align}
+\text{(a) }1 \quad \text{(b) }2 \quad \text{(c) }-2 \quad \text{(d) }-4
+\end{align}
+
+\solution \\
+
+Equation of perpendicular bisector:
+\begin{align}
+	\vec{n}^{\top}\vec{x} = c \label{eq:1}
+\end{align}
+where direction vector of $PQ$ is
+\begin{align}
+	\vec{PQ} = \myvec{k-1 \\ -1}, \label{eq:2}
+\end{align}
+As the perpendicular bisector has normal,
+\begin{align}
+\vec{n} = \myvec{k-1 \\ -1}.
+\end{align}
+The midpoint of $PQ$ is
+\begin{align}
+\vec{M} = \myvec{\tfrac{1+k}{2} \\[4pt] \tfrac{7}{2}}.
+\end{align}
+And 
+\begin{align}
+	c=-4 \label{eq:3}
+\end{align}
+
+From ~\eqref{eq:2} and ~\eqref{eq:3} in ~\eqref{eq:1}, 
+\begin{align}
+\myvec{k-1 & -1}\myvec{-\tfrac{1+k}{2} \\[4pt] -4-\tfrac{7}{2}}=0
+\end{align}
+
+\begin{align}
+\therefore -(k^2-1) + 15 = 0
+\end{align}
+
+\begin{align}
+-k^2+16=0 \quad \Rightarrow \quad k^2=16
+\end{align}
+
+Hence
+\begin{align}
+k = \pm 4
+\end{align}
+
+From the given options, the valid value is
+\[
+\boxed{-4}
+\]
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[height=0.5\textheight, keepaspectratio]{figs/Figure_1.png}
+    \label{figure_1}
+\end{figure}
+
+\end{document}

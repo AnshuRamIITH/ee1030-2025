@@ -1,0 +1,16 @@
+d = np.cross(n1, n2)
+A = np.vstack((n1, n2, d))
+b = np.array([c1, c2, 0])
+r0 = np.linalg.solve(A, b)
+
+t = np.linspace(-3, 3, 50)
+line_points = r0[:, None] + d[:, None]*t
+ax.plot(line_points[0], line_points[1],
+        line_points[2], color='k', linewidth=3)
+
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Z')
+ax.set_title("Plane Intersection and Required Plane")
+ax.view_init(elev=20, azim=40)
+plt.show()
